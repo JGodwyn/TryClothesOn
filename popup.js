@@ -1,28 +1,42 @@
 console.log('Try Clothes On extension popup loaded.');
 // Onboarding logic
+function addBouncyEffectToButtons() {
+  document.querySelectorAll('button').forEach((btn) => {
+    btn.addEventListener('click', function (e) {
+      btn.classList.remove('bouncy');
+      // Force reflow to restart animation
+      void btn.offsetWidth;
+      btn.classList.add('bouncy');
+    });
+  });
+}
+
 function showOnboarding() {
   const content = document.getElementById('content');
   fetch('onboarding.html')
     .then((response) => response.text())
     .then((html) => {
       content.innerHTML = html;
-      const nextBtn = document.getElementById('onboarding-next');
-      if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-          if (
-            typeof chrome !== 'undefined' &&
-            chrome.storage &&
-            chrome.storage.local
-          ) {
-            chrome.storage.local.set(
-              { onboardingShown: true },
-              showMainContent,
-            );
-          } else {
-            showMainContent();
-          }
-        });
-      }
+      setTimeout(() => {
+        const nextBtn = document.querySelector('.next-button');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            if (
+              typeof chrome !== 'undefined' &&
+              chrome.storage &&
+              chrome.storage.local
+            ) {
+              chrome.storage.local.set(
+                { onboardingShown: true },
+                showMainContent,
+              );
+            } else {
+              showMainContent();
+            }
+          });
+        }
+        addBouncyEffectToButtons();
+      }, 0);
     });
 }
 

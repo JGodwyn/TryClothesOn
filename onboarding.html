@@ -1,5 +1,36 @@
-<div class="onboarding">
-  <h2>Try out your own clothes</h2>
-  <p>Upload a picture and test a fit you see online</p>
-  <button id="onboarding-next">Next</button>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Try Clothes On</title>
+    <link rel="stylesheet" href="onboardingStyle.css" />
+  </head>
+
+  <body>
+    <main class="upload-container">
+      <section class="upload-card">
+        <img
+          src="https://api.builder.io/api/v1/image/assets/TEMP/e8458dc38ed55bde5a3cd0ecbea0e0b90f0bffad?placeholderIfAbsent=true&apiKey=4c6f771f177f4556b481a724114de2a3"
+          alt="Fashion model wearing clothes for virtual try-on demonstration"
+          class="hero-image"
+        />
+        <div class="brand-badge">
+          <span class="brand-text"> TryClothesOn </span>
+        </div>
+        <div class="upload-content">
+          <header class="upload-header">
+            <p class="upload-description">Upload a clear image of yourself</p>
+          </header>
+          <button
+            class="next-button"
+            type="button"
+            aria-label="Proceed to next step"
+          >
+            <span class="button-text">Get Started</span>
+          </button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
