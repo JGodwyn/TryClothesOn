@@ -1,0 +1,1 @@
+console.log('Try Clothes On background script running.');
