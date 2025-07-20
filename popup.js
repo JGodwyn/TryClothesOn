@@ -42,7 +42,34 @@ function showOnboarding() {
 
 function showMainContent() {
   const content = document.getElementById('content');
-  content.innerHTML = 'Enter the content of your plugin here.';
+  fetch('main.html')
+    .then((response) => response.text())
+    .then((html) => {
+      content.innerHTML = html;
+      setTimeout(() => {
+        addUploadCardInteractions();
+        addBouncyEffectToButtons();
+      }, 0);
+    });
+}
+
+// Add keyboard interaction support for upload cards
+function addUploadCardInteractions() {
+  const uploadCards = document.querySelectorAll('.upload-card');
+  uploadCards.forEach((card) => {
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        // Simulate file upload trigger
+        console.log('Upload triggered for:', card.getAttribute('aria-label'));
+        // Here you would typically trigger a file input dialog
+      }
+    });
+    card.addEventListener('click', function () {
+      console.log('Upload clicked for:', card.getAttribute('aria-label'));
+      // Here you would typically trigger a file input dialog
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -59,4 +86,5 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fallback for non-extension environments
     showOnboarding();
   }
+  addUploadCardInteractions();
 });

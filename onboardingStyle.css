@@ -6,10 +6,18 @@
     box-sizing: border-box;
 }
 
+html,
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    color: #000;
+    background: #fff;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -17,8 +25,10 @@ body {
 
 .upload-container {
     max-width: 431px;
-    padding: 0 31px;
+    padding: 24px;
     margin: 0 auto;
+    background: none;
+    box-shadow: none;
 }
 
 
@@ -35,7 +45,17 @@ body {
     overflow: hidden;
     align-items: stretch;
     justify-content: end;
-    padding: 10px 0 32px;
+    padding: 24px;
+    /* Remove pointer cursor and scaling */
+    cursor: default;
+    box-shadow: none;
+    transition: none;
+}
+
+.upload-card:hover {
+    /* Remove scaling and shadow on hover */
+    transform: none;
+    box-shadow: none;
 }
 
 
