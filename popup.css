@@ -1,56 +1,44 @@
-body {
-    font-family: Arial, sans-serif;
-    width: 400px;
-    min-height: 200px;
-}
-
-.onboarding {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 180px;
-    text-align: center;
-}
-
-.onboarding h2 {
-    margin-bottom: 10px;
-    font-size: 1.3em;
-}
-
-.onboarding p {
-    color: #555;
-    font-size: 1em;
-}
-
-
-/* --- Begin styles migrated from popup.html --- */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+html,
 body {
     font-family: 'Open Sans', sans-serif;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    background-color: #fff;
+    min-width: 400px;
+    max-width: 400px;
+    width: 400px;
+    height: 520px !important;
+    min-height: 520px !important;
+    max-height: 520px !important;
+    margin: 0;
     padding: 0;
+    display: block;
+    overflow: auto;
 }
 
 .try-clothes-container {
     width: 400px;
-    height: 440px;
-    border-radius: 16px;
+    min-width: 400px;
+    max-width: 400px;
+    height: 520px;
+    min-height: 520px;
+    max-height: 520px;
     position: relative;
-    background-color: #fff;
+    background-color: #ffffff;
     overflow: hidden;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-header,
+.upload-section,
+.upload-labels {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .gradient-background-wrapper {
@@ -63,11 +51,10 @@ body {
 }
 
 .gradient-background {
-    width: 476px;
-    height: 329px;
+    width: 600px;
+    height: 100%;
     position: absolute;
-    left: -38px;
-    top: 56px;
+    left: -75px;
 }
 
 .app-header {
@@ -78,9 +65,12 @@ body {
     gap: 8px;
     border-radius: 100000px;
     position: absolute;
-    left: 148px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: max-content;
     top: 24px;
-    width: 105px;
     height: 26px;
     z-index: 10;
 }
@@ -89,18 +79,9 @@ body {
     color: #999;
     font: 400 14px/20px 'Instrument Serif', serif;
     display: flex;
-    gap: 4px;
 }
 
-.title-word-try {
-    color: rgba(0, 0, 0, 1);
-}
-
-.title-word-clothes {
-    color: rgba(153, 153, 153, 1);
-}
-
-.title-word-on {
+.title-word-tryclotheson {
     color: rgba(0, 0, 0, 1);
 }
 
@@ -128,7 +109,6 @@ body {
 }
 
 .upload-card:hover {
-    transform: scale(1.02);
     box-shadow: 0px 4px 64px 0px rgba(0, 0, 0, 0.12);
 }
 
@@ -138,23 +118,23 @@ body {
 }
 
 .upload-card-left {
-    left: 56px;
-    top: 122px;
+    left: 40px;
+    top: 160px;
     transform: rotate(-4deg);
 }
 
 .upload-card-left:hover {
-    transform: rotate(-4deg) scale(1.02);
+    transform: rotate(-4deg) scale(1.05);
 }
 
 .upload-card-right {
-    left: 171px;
-    top: 149px;
+    left: 152px;
+    top: 176px;
     transform: rotate(4deg);
 }
 
 .upload-card-right:hover {
-    transform: rotate(4deg) scale(1.02);
+    transform: rotate(4deg) scale(1.05);
 }
 
 .upload-button {
@@ -174,8 +154,10 @@ body {
 .upload-text {
     color: #808080;
     text-align: center;
-    font: 700 14px/20px 'Open Sans', sans-serif;
+    font: 800 34px/20px 'Open Runde', sans-serif;
     margin: 0;
+    font-size: 17px !important;
+    line-height: 24px !important;
 }
 
 .upload-labels {
@@ -194,7 +176,7 @@ body {
 
 .upload-label-left {
     left: 98px;
-    top: 105px;
+    top: 128px;
     width: 54px;
     height: 10px;
     transform: rotate(-4deg);
@@ -202,87 +184,10 @@ body {
 
 .upload-label-right {
     left: 234px;
-    top: 134px;
+    top: 144px;
     width: 64px;
     height: 10px;
     transform: rotate(4deg);
-}
-
-@media (max-width: 991px) {
-    .try-clothes-container {
-        width: 350px;
-        height: 400px;
-    }
-    .app-header {
-        left: 123px;
-        top: 20px;
-    }
-    .upload-card {
-        width: 140px;
-        height: 160px;
-    }
-    .upload-card-left {
-        left: 40px;
-        top: 110px;
-    }
-    .upload-card-right {
-        left: 150px;
-        top: 135px;
-    }
-    .upload-label-left {
-        left: 85px;
-        top: 95px;
-    }
-    .upload-label-right {
-        left: 205px;
-        top: 120px;
-    }
-}
-
-@media (max-width: 640px) {
-    .try-clothes-container {
-        width: 320px;
-        height: 380px;
-    }
-    .app-header {
-        left: 108px;
-        top: 16px;
-        width: 95px;
-        height: 24px;
-        padding: 6px 10px;
-    }
-    .app-title {
-        font-size: 12px;
-        line-height: 18px;
-    }
-    .upload-card {
-        width: 120px;
-        height: 140px;
-        padding: 12px;
-    }
-    .upload-card-left {
-        left: 30px;
-        top: 100px;
-    }
-    .upload-card-right {
-        left: 130px;
-        top: 120px;
-    }
-    .upload-text {
-        font-size: 12px;
-        line-height: 18px;
-    }
-    .upload-label {
-        font-size: 12px;
-    }
-    .upload-label-left {
-        left: 70px;
-        top: 85px;
-    }
-    .upload-label-right {
-        left: 175px;
-        top: 105px;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
