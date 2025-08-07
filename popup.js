@@ -27,7 +27,9 @@ function showOnboarding() {
               chrome.storage.local
             ) {
               chrome.storage.local.set(
-                { onboardingShown: true },
+                {
+                  onboardingShown: true,
+                },
                 showMainContent,
               );
             } else {
@@ -53,22 +55,159 @@ function showMainContent() {
     });
 }
 
-// Add keyboard interaction support for upload cards
+// Add file upload functionality for upload cards
 function addUploadCardInteractions() {
-  const uploadCards = document.querySelectorAll('.upload-card');
-  uploadCards.forEach((card) => {
-    card.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        // Simulate file upload trigger
-        console.log('Upload triggered for:', card.getAttribute('aria-label'));
-        // Here you would typically trigger a file input dialog
+  const leftCard = document.querySelector('.upload-card-left');
+  const rightCard = document.querySelector('.upload-card-right');
+
+  if (!leftCard || !rightCard) return;
+
+  // Track uploaded images
+  let leftImageUploaded = false;
+  let rightImageUploaded = false;
+
+  // Create hidden file input elements
+  const leftFileInput = document.createElement('input');
+  leftFileInput.type = 'file';
+  leftFileInput.accept = 'image/*';
+  leftFileInput.style.display = 'none';
+
+  const rightFileInput = document.createElement('input');
+  rightFileInput.type = 'file';
+  rightFileInput.accept = 'image/*';
+  rightFileInput.style.display = 'none';
+
+  // Add file inputs to the document
+  document.body.appendChild(leftFileInput);
+  document.body.appendChild(rightFileInput);
+
+  // Function to check if both images are uploaded and show/hide button
+  function checkBothImagesUploaded() {
+    const actionButtonContainer = document.querySelector(
+      '.action-button-container',
+    );
+    if (actionButtonContainer) {
+      if (leftImageUploaded && rightImageUploaded) {
+        actionButtonContainer.style.display = 'flex';
+      } else {
+        actionButtonContainer.style.display = 'none';
+      }
+    }
+  }
+
+  // Function to handle file selection
+  function handleFileSelect(fileInput, card, isLeftCard) {
+    fileInput.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        // Check if file is an image
+        if (!file.type.startsWith('image/')) {
+          alert('Please select an image file.');
+          return;
+        }
+
+        // Create a FileReader to read the image
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          // Create image element
+          const img = document.createElement('img');
+          img.src = e.target.result;
+
+          // Clear the card content and add the image
+          card.innerHTML = '';
+          card.appendChild(img);
+
+          // Add a small overlay with a change button
+          const overlay = document.createElement('div');
+          overlay.className = 'change-overlay';
+          overlay.textContent = 'Change';
+          overlay.addEventListener('click', function (e) {
+            e.stopPropagation();
+            fileInput.click();
+          });
+
+          card.appendChild(overlay);
+
+          // Make the card clickable again to change the image
+          card.addEventListener('click', function () {
+            fileInput.click();
+          });
+
+          // Clear the file input to allow re-uploading the same file
+          fileInput.value = '';
+
+          // Mark this image as uploaded
+          if (isLeftCard) {
+            leftImageUploaded = true;
+          } else {
+            rightImageUploaded = true;
+          }
+
+          // Check if both images are uploaded
+          checkBothImagesUploaded();
+        };
+        reader.readAsDataURL(file);
       }
     });
-    card.addEventListener('click', function () {
-      console.log('Upload clicked for:', card.getAttribute('aria-label'));
-      // Here you would typically trigger a file input dialog
+  }
+
+  // Add click event listeners to the cards
+  leftCard.addEventListener('click', function () {
+    leftFileInput.click();
+  });
+
+  rightCard.addEventListener('click', function () {
+    rightFileInput.click();
+  });
+
+  // Handle file selection for both cards
+  handleFileSelect(leftFileInput, leftCard, true);
+  handleFileSelect(rightFileInput, rightCard, false);
+
+  // Add event listeners to handle when images are changed/removed
+  leftFileInput.addEventListener('change', function () {
+    if (!leftFileInput.files[0]) {
+      leftImageUploaded = false;
+      checkBothImagesUploaded();
+    }
+  });
+
+  rightFileInput.addEventListener('change', function () {
+    if (!rightFileInput.files[0]) {
+      rightImageUploaded = false;
+      checkBothImagesUploaded();
+    }
+  });
+
+  // Add click handler for the action button
+  const actionButton = document.querySelector('.action-button');
+  if (actionButton) {
+    actionButton.addEventListener('click', function () {
+      // Add bouncy effect
+      actionButton.classList.remove('bouncy');
+      void actionButton.offsetWidth;
+      actionButton.classList.add('bouncy');
+
+      // Handle the action when both images are uploaded
+      console.log('Processing images for virtual try-on...');
+      // TODO: Add your image processing logic here
+      alert('Processing your images for virtual try-on!');
     });
+  }
+
+  // Add keyboard support for accessibility
+  leftCard.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      leftFileInput.click();
+    }
+  });
+
+  rightCard.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      rightFileInput.click();
+    }
   });
 }
 
@@ -77,7 +216,9 @@ document.addEventListener('DOMContentLoaded', function () {
     chrome.storage.local.get(['onboardingShown'], function (result) {
       if (!result.onboardingShown) {
         showOnboarding();
-        chrome.storage.local.set({ onboardingShown: true });
+        chrome.storage.local.set({
+          onboardingShown: true,
+        });
       } else {
         showMainContent();
       }

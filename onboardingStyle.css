@@ -18,6 +18,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 
@@ -29,6 +30,7 @@ body {
     margin: 0 auto;
     background: none;
     box-shadow: none;
+    width: 100%;
 }
 
 
@@ -43,9 +45,10 @@ body {
     width: 100%;
     flex-direction: column;
     overflow: hidden;
-    align-items: stretch;
-    justify-content: end;
-    padding: 24px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32px 24px;
+    gap: 24px;
     /* Remove pointer cursor and scaling */
     cursor: default;
     box-shadow: none;
@@ -66,8 +69,13 @@ body {
     object-fit: contain;
     object-position: center;
     width: 100%;
+    max-width: 380px;
+    max-height: 220px;
     align-self: center;
     z-index: 0;
+    flex-shrink: 0;
+    display: block;
+    margin: 0 auto;
 }
 
 
@@ -77,23 +85,19 @@ body {
     border-radius: 100000px;
     background-color: rgba(255, 255, 255, 1);
     align-self: center;
-    position: absolute;
-    z-index: 1;
     display: flex;
     align-items: center;
     gap: 8px;
     color: #000000;
     justify-content: center;
-    left: 50%;
-    top: 16px;
-    transform: translateX(-50%);
-    padding: 4px 8px;
+    padding: 8px 16px;
     font: 500 14px/1 'Bitcount Grid Single', -apple-system, Roboto, Helvetica, sans-serif;
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .brand-text {
-    leading-trim: both;
-    text-edge: cap;
     align-self: center;
     margin: auto 0;
     font: 400 14px 'Instrument Serif', -apple-system, Roboto, Helvetica, sans-serif
@@ -104,8 +108,12 @@ body {
 
 .upload-content {
     z-index: 1;
-    margin-top: 8px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: auto;
 }
 
 
@@ -118,8 +126,6 @@ body {
 }
 
 .upload-title {
-    leading-trim: both;
-    text-edge: cap;
     font: 600 17px 'Open Runde', -apple-system, Roboto, Helvetica, sans-serif;
     margin-bottom: 8px;
 }
@@ -127,6 +133,7 @@ body {
 .upload-description {
     font: 400 37px 'Instrument Serif', -apple-system, Roboto, Helvetica, sans-serif;
     margin: 0;
+    line-height: 1.2;
 }
 
 
@@ -136,7 +143,7 @@ body {
     border-radius: 12px;
     background-color: rgba(255, 85, 0, 1);
     display: flex;
-    margin-top: 16px;
+    margin-top: 0;
     min-height: 40px;
     width: 100%;
     align-items: center;
@@ -165,8 +172,6 @@ body {
 }
 
 .button-text {
-    leading-trim: both;
-    text-edge: cap;
     align-self: stretch;
     margin: auto 0;
     font: 800 17px/20px 'Open Runde', sans-serif;
@@ -188,9 +193,11 @@ body {
     .upload-card {
         border: 2px solid #000;
     }
+
     .brand-badge {
         border: 1px solid #000;
     }
+
     .next-button {
         border: 2px solid #fff;
     }
@@ -208,6 +215,7 @@ body {
 /* Ensure text remains readable at different zoom levels */
 
 @media (min-resolution: 2dppx) {
+
     .upload-title,
     .upload-description,
     .button-text,
@@ -221,12 +229,15 @@ body {
     0% {
         transform: scale(1);
     }
+
     30% {
         transform: scale(0.92);
     }
+
     60% {
         transform: scale(1.05);
     }
+
     100% {
         transform: scale(1);
     }
