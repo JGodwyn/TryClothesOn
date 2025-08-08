@@ -128,6 +128,9 @@ function addUploadCardInteractions() {
 
           card.appendChild(overlay);
 
+          // Add white border to indicate image is uploaded
+          card.classList.add('has-image');
+
           // Mark this image as uploaded
           if (isLeftCard) {
             leftImageUploaded = true;
@@ -140,6 +143,8 @@ function addUploadCardInteractions() {
         };
         reader.readAsDataURL(file);
       }
+      // Note: We don't handle the else case (no file selected) because
+      // that means the user cancelled the file picker, so we keep the existing image
     });
   }
 

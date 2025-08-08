@@ -105,8 +105,13 @@ body {
     position: absolute;
     background-color: #fff;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
     overflow: hidden;
+    border: 2px solid transparent;
+}
+
+.upload-card.has-image {
+    border: 4px solid white;
 }
 
 .upload-card img {
