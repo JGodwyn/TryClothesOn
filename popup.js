@@ -128,14 +128,6 @@ function addUploadCardInteractions() {
 
           card.appendChild(overlay);
 
-          // Make the card clickable again to change the image
-          card.addEventListener('click', function () {
-            fileInput.click();
-          });
-
-          // Clear the file input to allow re-uploading the same file
-          fileInput.value = '';
-
           // Mark this image as uploaded
           if (isLeftCard) {
             leftImageUploaded = true;
@@ -152,32 +144,23 @@ function addUploadCardInteractions() {
   }
 
   // Add click event listeners to the cards
-  leftCard.addEventListener('click', function () {
-    leftFileInput.click();
+  leftCard.addEventListener('click', function (e) {
+    // Don't trigger if clicking on the change overlay
+    if (!e.target.classList.contains('change-overlay')) {
+      leftFileInput.click();
+    }
   });
 
-  rightCard.addEventListener('click', function () {
-    rightFileInput.click();
+  rightCard.addEventListener('click', function (e) {
+    // Don't trigger if clicking on the change overlay
+    if (!e.target.classList.contains('change-overlay')) {
+      rightFileInput.click();
+    }
   });
 
   // Handle file selection for both cards
   handleFileSelect(leftFileInput, leftCard, true);
   handleFileSelect(rightFileInput, rightCard, false);
-
-  // Add event listeners to handle when images are changed/removed
-  leftFileInput.addEventListener('change', function () {
-    if (!leftFileInput.files[0]) {
-      leftImageUploaded = false;
-      checkBothImagesUploaded();
-    }
-  });
-
-  rightFileInput.addEventListener('change', function () {
-    if (!rightFileInput.files[0]) {
-      rightImageUploaded = false;
-      checkBothImagesUploaded();
-    }
-  });
 
   // Add click handler for the action button
   const actionButton = document.querySelector('.action-button');

@@ -245,15 +245,17 @@ body {
 
 /* Action button container and styling */
 .action-button-container {
+    position: absolute;
+    bottom: 20px;
     width: 100%;
     display: flex;
     justify-content: center;
-    padding: 20px 24px;
-    margin-top: auto;
+    padding: 10px 24px 20px 24px;
+    z-index: 100;
 }
 
 .action-button {
-    border-radius: 12px;
+    border-radius: 100000px;
     background-color: rgba(255, 85, 0, 1);
     display: flex;
     min-height: 40px;
@@ -269,6 +271,7 @@ body {
     border: none;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    box-shadow: none;
 }
 
 .action-button:hover {
@@ -290,6 +293,19 @@ body {
     font: 800 17px/20px 'Open Runde', sans-serif;
 }
 
+/* Scale-up animation for button appearance */
+@keyframes button-scale-up {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 /* Bouncy animation for action button */
 @keyframes button-bounce {
     0% {
@@ -307,6 +323,10 @@ body {
     100% {
         transform: scale(1);
     }
+}
+
+.action-button-container {
+    animation: button-scale-up 0.3s ease-out;
 }
 
 .action-button.bouncy {
