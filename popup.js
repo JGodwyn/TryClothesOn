@@ -1,4 +1,11 @@
 console.log('Try Clothes On extension popup loaded.');
+
+// Initialize API service
+const virtualTryOnAPI = new VirtualTryOnAPI();
+
+// Global variables for tracking uploaded files
+let userImageFile = null;
+let clothingImageFile = null;
 // Onboarding logic
 function addBouncyEffectToButtons() {
   document.querySelectorAll('button').forEach((btn) => {
@@ -106,6 +113,13 @@ function addUploadCardInteractions() {
           return;
         }
 
+        // Store the file for API processing
+        if (isLeftCard) {
+          userImageFile = file;
+        } else {
+          clothingImageFile = file;
+        }
+
         // Create a FileReader to read the image
         const reader = new FileReader();
         reader.onload = function (e) {
@@ -178,8 +192,7 @@ function addUploadCardInteractions() {
 
       // Handle the action when both images are uploaded
       console.log('Processing images for virtual try-on...');
-      // TODO: Add your image processing logic here
-      alert('Processing your images for virtual try-on!');
+      processVirtualTryOn();
     });
   }
 
@@ -198,6 +211,159 @@ function addUploadCardInteractions() {
     }
   });
 }
+
+// Virtual Try-On Processing Functions
+function showLoadingScreen() {
+  const loadingHTML = `
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Processing your virtual try-on...</div>
+      <div class="loading-subtext">This may take up to 2 minutes. Please don't close the extension.</div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 0%"></div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', loadingHTML);
+
+  // Animate progress bar
+  const progressFill = document.querySelector('.progress-fill');
+  let progress = 0;
+  const progressInterval = setInterval(() => {
+    progress += Math.random() * 15;
+    if (progress > 90) progress = 90; // Don't go to 100% until actually complete
+    progressFill.style.width = progress + '%';
+  }, 2000);
+
+  return progressInterval;
+}
+
+function hideLoadingScreen() {
+  const loadingContainer = document.querySelector('.loading-container');
+  if (loadingContainer) {
+    loadingContainer.remove();
+  }
+}
+
+function showResultScreen(resultImageUrl) {
+  const resultHTML = `
+    <div class="result-container">
+      <div class="result-header">
+        <div class="result-title">Virtual Try-On Complete!</div>
+        <button class="close-button" onclick="closeResultScreen()">&times;</button>
+      </div>
+      <div class="result-image-container">
+        <img src="${resultImageUrl}" alt="Virtual try-on result" class="result-image">
+        <div class="result-actions">
+          <button class="result-button download-button" onclick="downloadResult('${resultImageUrl}')">
+            Download Image
+          </button>
+          <button class="result-button try-again-button" onclick="closeResultScreen()">
+            Try Another Item
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', resultHTML);
+}
+
+function showErrorScreen(errorMessage) {
+  const errorHTML = `
+    <div class="error-container">
+      <div class="error-icon">⚠️</div>
+      <div class="error-title">Processing Failed</div>
+      <div class="error-message">${errorMessage}</div>
+      <button class="retry-button" onclick="closeErrorScreen()">Try Again</button>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', errorHTML);
+}
+
+function closeResultScreen() {
+  const resultContainer = document.querySelector('.result-container');
+  if (resultContainer) {
+    resultContainer.remove();
+  }
+}
+
+function closeErrorScreen() {
+  const errorContainer = document.querySelector('.error-container');
+  if (errorContainer) {
+    errorContainer.remove();
+  }
+}
+
+function downloadResult(imageUrl) {
+  const link = document.createElement('a');
+  link.href = imageUrl;
+  link.download = 'virtual-tryon-result.jpg';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+async function processVirtualTryOn() {
+  try {
+    // Validate that we have both images
+    if (!userImageFile || !clothingImageFile) {
+      throw new Error('Please upload both your image and a clothing item.');
+    }
+
+    // Show loading screen
+    const progressInterval = showLoadingScreen();
+
+    // Process the virtual try-on
+    const result = await virtualTryOnAPI.processVirtualTryOn(
+      userImageFile,
+      clothingImageFile,
+    );
+
+    // Clear progress interval
+    clearInterval(progressInterval);
+
+    // Hide loading screen
+    hideLoadingScreen();
+
+    // Show result
+    if (result && result.length > 0) {
+      showResultScreen(result[0]); // Assuming the API returns an array of image URLs
+    } else {
+      throw new Error('No result image received from the API.');
+    }
+  } catch (error) {
+    console.error('Virtual try-on processing failed:', error);
+
+    // Hide loading screen
+    hideLoadingScreen();
+
+    // Show error screen
+    let errorMessage =
+      'An unexpected error occurred while processing your images.';
+
+    if (error.message.includes('API request failed')) {
+      errorMessage =
+        'Unable to connect to the AI service. Please check your internet connection and try again.';
+    } else if (error.message.includes('API key')) {
+      errorMessage = 'API configuration error. Please contact support.';
+    } else if (error.message.includes('timeout')) {
+      errorMessage =
+        'Processing took too long. Please try again with smaller images.';
+    } else if (error.message.includes('Please upload both')) {
+      errorMessage = error.message;
+    }
+
+    showErrorScreen(errorMessage);
+  }
+}
+
+// Make functions globally available for onclick handlers
+window.closeResultScreen = closeResultScreen;
+window.closeErrorScreen = closeErrorScreen;
+window.downloadResult = downloadResult;
 
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
